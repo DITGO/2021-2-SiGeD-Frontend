@@ -186,6 +186,7 @@ const DemandStatistics = async (payload) => {
     CLIENTES: 'Cliente',
     SECTORS: 'Setor',
     CATEGORY: 'Categoria',
+    FEATURE: 'Característica'
   };
 
   let clientData = {
