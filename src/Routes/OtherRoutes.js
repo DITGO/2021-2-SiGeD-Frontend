@@ -28,6 +28,7 @@ import WorkspaceListScreen from '../Pages/WorkplaceScreen';
 import StatisticByCategory from '../Pages/StatisticsScreen/ByCategory';
 import StatisticBySectors from '../Pages/StatisticsScreen/BySectors';
 import StatisticClientScreen from '../Pages/StatisticsScreen/ByClients';
+import PatrimonyScreen from '../Pages/PatrimonyScreen';
 
 const OtherRoutes = () => {
   const { user } = useProfileUser();
@@ -67,6 +68,7 @@ const OtherRoutes = () => {
               <Route path="/estatisticas/setor" exact component={StatisticBySectors} />
               <Route path="/estatisticas/cliente" exact component={StatisticClientScreen} />
               <Route path="/lotacoes/" exact component={WorkspaceListScreen} />
+              <Route path="/patrimonio" exact component={PatrimonyScreen} />
               <Redirect path="*" to="/" />
             </Switch>
           )

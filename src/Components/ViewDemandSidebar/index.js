@@ -20,6 +20,7 @@ import colors from '../../Constants/colors';
 import CreateAlertModal from '../CreateAlertModal';
 import { useProfileUser } from '../../Context';
 import { getAlertsByDemand } from '../../Services/Axios/demandsServices';
+import UserDropdown from '../UserDropdown';
 
 const ViewDemandSidebar = ({
   clientImage, clientName, userName, selectedCategories, demand,
@@ -30,29 +31,38 @@ const ViewDemandSidebar = ({
   const [flag, setFlag] = useState(false);
   const [show, setShow] = useState(false);
   const [sorted, setSorted] = useState(false);
+  const [responsibleUserName, setResponsibleUserName] = useState('');
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   const { user, startModal } = useProfileUser();
 
-  const actualSector = sectorsResponse?.filter(
-    (sectorByID) => sectorByID._id
-      === demand.sectorHistory[demand.sectorHistory.length - 1].sectorID,
+  const currentSector = sectorsResponse?.find(
+    (sectorByID) => sectorByID._id === demand.sectorHistory.at(-1).sectorID,
   );
 
-  const [sectorOption, setSectorOption] = useState(actualSector[0]?.name);
+  const currentResponsibleName = demand?.sectorHistory.at(-1).responsibleUserName;
 
-  const sectorsList = () => sectorsResponse.map((sector) => sector.name);
+  const [sectorOption, setSectorOption] = useState(currentSector?.name);
+  const [selectedSectorObj, setSelectedSectorObj] = useState(currentSector);
 
   const alertMessage = () => {
     startModal('Você deve editar a demanda para retirar a categoria!');
   };
 
   useEffect(() => {
-    if (actualSector[0] && !flag) {
-      setSectorOption(actualSector[0]?.name);
+    if (currentSector && !flag) {
+      setSectorOption(currentSector?.name);
+      setResponsibleUserName(demand.sectorHistory.at(-1).responsibleUserName);
       setFlag(true);
     }
-  }, [actualSector]);
+  }, [currentSector]);
+
+  useEffect(() => {
+  }, [currentResponsibleName]);
+
+  useEffect(() => {
+    setSelectedSectorObj(sectorsResponse.find((s) => s.name === sectorOption));
+  }, [sectorOption]);
 
   const sortList = () => {
     const sortedAlerts = alerts.sort((a, b) => moment(a.date).format('YYYYMMDD') - moment(b.date).format('YYYYMMDD'));
@@ -72,7 +82,7 @@ const ViewDemandSidebar = ({
 
   useEffect(() => {
     if (!sorted) {
-      getAlertsApi();
+      getAlertsApi().then(() => {});
       sortList();
     }
   }, [sorted, alerts]);
@@ -138,19 +148,36 @@ const ViewDemandSidebar = ({
           Setor:
         </p>
         <DropdownComponent
-          OnChangeFunction={(Option) => setSectorOption(Option.target.value)}
+          OnChangeFunction={(Option) => {
+            setSectorOption(Option.target.value);
+            setSelectedSectorObj(sectorsResponse.find((s) => s.name === Option.target.value));
+          }}
           style={styles.dropdownComponentStyle}
           optionStyle={{
             backgroundColor: `${colors.navHeaders}`,
           }}
-          optionList={sectorsList()}
+          optionList={sectorsResponse.map((sector) => sector.name)}
           value={sectorOption}
         />
+        <UserDropdown
+          placeholder="Responsável setor (opcional)"
+          label="Responsável"
+          externalFilters={{ sector: selectedSectorObj?._id, open: 'any' }}
+          externalStyles={{ marginTop: '10px' }}
+          labelStyles={{
+            marginLeft: 'unset', fontSize: '1em', marginBottom: '10px',
+          }}
+          dropdownStyles={{ width: '28vw', borderRadius: '8px' }}
+          setInitialValue={() => {}}
+          initialValue={currentResponsibleName}
+          setUsername={setResponsibleUserName}
+          waitForFilter />
         {sidebarState
           && (
             <div style={styles.sidebarStateDiv}>
               <SendDemandModal
                 sectorOption={sectorOption}
+                responsibleUserName={responsibleUserName}
                 getDemandApi={getDemandApi}
                 showUpdates={showUpdates}
                 demand={demand}
@@ -164,7 +191,7 @@ const ViewDemandSidebar = ({
           <SelectionBox>
             <CategoryField>
               <p>
-                Categoria:
+                Categorias:
               </p>
               <SelectedCategories
                 selectedCategories={selectedCategories}
@@ -186,9 +213,7 @@ const ViewDemandSidebar = ({
                   />
                 )) }
               </ListAlert>
-              <CreateAlertDiv
-                onClick={() => handleShow()}
-              >
+              <CreateAlertDiv onClick={() => handleShow()}>
                 <CreateAlertIcon>
                   <BiStopwatch />
                 </CreateAlertIcon>
@@ -207,16 +232,13 @@ const ViewDemandSidebar = ({
                 user={user}
                 title="Cadastrar"
               />
+              { user.role === 'admin' && (
+              <TextButton onClick={() => handleShowHistory()} style={{ marginTop: '15px' }}>
+                Histórico de alterações
+              </TextButton>
+              )}
             </AlertContainer>
           </SelectionBox>
-        )}
-        { user.role === 'admin'
-        && (
-          <TextButton
-            onClick={() => handleShowHistory()}
-          >
-            Histórico de alterações
-          </TextButton>
         )}
       </ContentBox>
     </RightBox>

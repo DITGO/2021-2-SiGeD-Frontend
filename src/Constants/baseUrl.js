@@ -7,3 +7,5 @@ export const BaseUrlDemands = 'http://localhost:3003';
 export const BaseUrlSectors = 'http://localhost:3004';
 
 export const BaseUrlCargos = 'http://localhost:3005';
+
+export const BaseUrlPatrimonio = 'http://localhost:3006';
