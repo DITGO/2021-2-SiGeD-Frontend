@@ -59,7 +59,9 @@ const NavbarComp = () => {
 
         <Navbar expand="lg" variant="dark" clickfixed="top" fixed="top" style={styles.navbar}>
           <Navbar.Brand style={{ marginLeft: 25 }}>
-            <img src={Logo} alt="Logo SiGeD" height={50} width={120} />
+            <Link as={Link} to="/">
+              <img src={Logo} alt="Logo SiGeD" height={50} width={120} />
+            </Link>
           </Navbar.Brand>
           { token && <Navbar.Toggle aria-controls="navbar-police" />}
           { token
@@ -109,9 +111,6 @@ const NavbarComp = () => {
                   <Nav.Link as={Link} to="/cargos" style={styles.navbarText}>
                     Cargos
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/patrimonio" style={styles.navbarText}>
-                    Patrimonio
-                  </Nav.Link>
                   <Navbar.Brand style={{ cursor: 'pointer' }} onClick={() => { handleShow(); getAlertsApi(); }}>
                     <BsBell />
                   </Navbar.Brand>
@@ -135,7 +134,9 @@ const NavbarComp = () => {
 
       <Navbar expand="lg" variant="dark" clickfixed="top" fixed="top" style={styles.navbar}>
         <Navbar.Brand>
-          <img src={Logo} alt="Logo SiGeD" height={50} width={120} />
+          <Link as={Link} to="/">
+            <img src={Logo} alt="Logo SiGeD" height={50} width={120} />
+          </Link>
         </Navbar.Brand>
         { token && <Navbar.Toggle aria-controls="navbar-police" />}
         { token

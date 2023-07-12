@@ -1,30 +1,19 @@
 {
   "env": {
-    "browser": true,
-    "es2021": true
+      "browser": false,
+      "es2021": true
   },
   "extends": [
-    "plugin:react/recommended",
-    "airbnb"
+      "google",
+      "plugin:react/recommended"
   ],
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 12,
-    "sourceType": "module"
+      "ecmaVersion": "latest",
+      "sourceType": "module"
   },
   "plugins": [
-    "react"
+      "react"
   ],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "react/prop-types": "off",
-    "react/button-has-type": "off",
-    "react/react-in-jsx-scope": "off",
-    "no-underscore-dangle": "off",
-    "react/no-array-index-key": "off",
-    "react/jsx-closing-bracket-location": "off",
-    "linebreak-style": "off"
   }
 }
