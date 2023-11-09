@@ -79,7 +79,7 @@ const ListScreen = ({ newUser }) => {
                   </TableTitle>
                   <Bar />
 
-                  <TableTitle width={20}>
+                  <TableTitle width={19}>
                     <P>Cargo</P>
                   </TableTitle>
                   <Bar />
