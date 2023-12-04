@@ -26,7 +26,8 @@ export const validatePassword = (pass) => {
 };
 
 export const validateStringCpf = (cpf) => {
-  if (cpf.length === 14) {
+  const regex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+  if ((cpf.length === 14 && (regex.test(cpf))) || (cpf.length === 11 && !regex.test(cpf))) {
     return true;
   }
   return false;
